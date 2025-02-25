@@ -13,16 +13,24 @@
         <div id="mydiv"></div>
 
         <script type="text/babel">
+            // Define the suits and ranks for the cards to adhere to.
             const suits = ["♥", "♦", "♠", "♣"]
             const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-            let cards = [];
+            let inDeck = [];
+            let activeCards = [];
 
+            // Add the initial set of 52 cards into the list.
             for (var i = 0; i < suits.length; i++) {
                 for (var x = 0; x < ranks.length; x++) {
-                    cards[cards.length] = ranks[x] + suits[i]
+                    inDeck[inDeck.length] = ranks[x] + suits[i]
                 }
             }
-            
+
+            function GenerateCard() {
+                function selectCard() {console.log(inDeck[Math.floor(Math.random() * inDeck.length)])}
+                return <div className="deck" onClick={selectCard}>Generate Card</div>
+            }
+
             function CardComponent(props) {
                 return <div className="card" id={props.suit} onClick={props.clickHandler}>{props.rank}{props.suit}</div>
             }
@@ -31,6 +39,7 @@
             const root = ReactDOM.createRoot(container);
             root.render(
                 <div>
+                    <GenerateCard />
                     <CardComponent suit={suits[Math.floor(Math.random() * suits.length)]} rank={ranks[Math.floor(Math.random() * ranks.length)]}/>
                 </div>
             )

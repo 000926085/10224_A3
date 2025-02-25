@@ -1,4 +1,4 @@
-.card {
+.card, .deck {
     height: 250px;
     width: 175px;
     border: 2px solid black;
