@@ -15,23 +15,25 @@
         <script type="text/babel">
             const suits = ["♥", "♦", "♠", "♣"]
             const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+            let cards = [];
 
-            function CardComponent(props) {
-                return <div className="card" id={props.suit}>{props.rank}{props.suit}</div>
+            for (var i = 0; i < suits.length; i++) {
+                for (var x = 0; x < ranks.length; x++) {
+                    cards[cards.length] = ranks[x] + suits[i]
+                }
             }
-
-            function Hello() {
-                return (
-                    <div>
-                        <h1>Hello World!</h1>
-                        <div className="card">A♥</div>
-                    </div>
-                )
+            
+            function CardComponent(props) {
+                return <div className="card" id={props.suit} onClick={props.clickHandler}>{props.rank}{props.suit}</div>
             }
 
             const container = document.getElementById('mydiv');
             const root = ReactDOM.createRoot(container);
-            root.render(<CardComponent suit={suits[Math.floor(Math.random() * suits.length)]} rank={ranks[Math.floor(Math.random() * ranks.length)]} />)
+            root.render(
+                <div>
+                    <CardComponent suit={suits[Math.floor(Math.random() * suits.length)]} rank={ranks[Math.floor(Math.random() * ranks.length)]}/>
+                </div>
+            )
         </script>
     </body>
     
