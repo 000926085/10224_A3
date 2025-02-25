@@ -16,6 +16,10 @@
             const suits = ["♥", "♦", "♠", "♣"]
             const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
+            function CardComponent(props) {
+                return <div className="card" id={props.suit}>{props.rank}{props.suit}</div>
+            }
+
             function Hello() {
                 return (
                     <div>
@@ -27,7 +31,7 @@
 
             const container = document.getElementById('mydiv');
             const root = ReactDOM.createRoot(container);
-            root.render(<Hello />)
+            root.render(<CardComponent suit={suits[Math.floor(Math.random() * suits.length)]} rank={ranks[Math.floor(Math.random() * ranks.length)]} />)
         </script>
     </body>
     
