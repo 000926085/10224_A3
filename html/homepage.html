@@ -13,7 +13,7 @@
         <div id="mydiv"></div>
 
         <script type="text/babel">
-            function GenerateDeck() {
+            /* function GenerateDeck() {
                 // Define the suits and ranks for the cards to adhere to.
                 const suits = ["♥", "♦", "♠", "♣"]
                 const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
@@ -32,6 +32,77 @@
                 return (
                     <div> 
                         <div className="deck" onClick={() => setCards([...cards, deck[Math.floor(Math.random() * deck.length)]])}>Generate</div>
+                            {cards.map((value, index) => (
+                                <div className="card" id={value.charAt(1)} key={index}>{value}</div>
+                            ))}
+                    </div>
+                )
+            } */
+
+            /*function GenerateDeck() {
+                // Define the suits and ranks for the cards to adhere to.
+                const suits = ["♥", "♦", "♠", "♣"]
+                const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+
+                let deck = [];
+                let count = 0;
+
+                for (var i = 0; i < suits.length; i++) {
+                    for (var x = 0; x < ranks.length; x++) {
+                        deck[count++] = (ranks[x] + suits[i])
+                    }
+                }
+
+                let [cards, setCards] = React.useState([])
+
+                return (
+                    <div> 
+                        <div className="deck" onClick={() => setCards([...cards, deck[Math.floor(Math.random() * deck.length)]])}>Generate</div>
+                            {console.log("Cards: " + cards.length)}
+                            {console.log("Deck: " + deck.length)}
+
+                            {cards.map((value, index) => (
+                                <div className="card" id={value.charAt(1)} key={index}>{value}</div>
+                            ))}
+                    </div>
+                )
+            }*/
+
+            function GenerateDeck() {
+                // Define the suits and ranks for the cards to adhere to.
+                const suits = ["♥", "♦", "♠", "♣"]
+                const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+
+                // Create an array and fill the contents with each possible card.
+                let deck = [];
+                let count = 0;
+                for (var i = 0; i < suits.length; i++) {
+                    for (var x = 0; x < ranks.length; x++) {
+                        deck[count++] = (ranks[x] + suits[i])
+                    }
+                }
+
+                // Set component state
+                const [cards, setCards] = React.useState([])
+                const [myDeck, setDeck] = React.useState(deck)
+
+                // Remove a random card from the deck and add it to the list of active cards.
+                function ModifyCards() {
+                    if (myDeck.length != 0) {
+                        let picked = myDeck[Math.floor(Math.random() * myDeck.length)]
+
+                        setCards([...cards, picked])
+                        myDeck.splice(myDeck.indexOf(picked), 1)
+                        setDeck(myDeck) 
+
+                        console.log(myDeck.length)
+                    }
+                    else { alert("You have no cards remaining!") }
+                }
+
+                return (
+                    <div> 
+                        <div className="deck" onClick={() => ModifyCards()}>{myDeck.length > 0 ? 'Generate' : 'Empty!'}</div>
                             {cards.map((value, index) => (
                                 <div className="card" id={value.charAt(1)} key={index}>{value}</div>
                             ))}
