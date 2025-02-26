@@ -13,11 +13,19 @@
         <div id="mydiv"></div>
 
         <script type="text/babel">
-            /**
-             * Card Component for creating a card with the provided props.
-             **/
             function GenerateCard(props) {
-                return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} key={props.cardIndex}>{props.cardValue}</div>
+                const[mode, setMode] = React.useState(false);
+
+                function switchMode() {
+                    if (mode) {
+                        setMode(false)
+                    }
+                    else {
+                        setMode(true)
+                    }
+                }
+
+                return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={switchMode} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
             }
 
             function GenerateDeck() {
@@ -43,7 +51,6 @@
                     for (i = 0; i < times; i++) {
                         if (myDeck.length != 0) {
                             let picked = myDeck[Math.floor(Math.random() * myDeck.length)]
-                            console.log(picked)
 
                             setCards([...cards, picked])
                             myDeck.splice(myDeck.indexOf(picked), 1)
@@ -63,7 +70,7 @@
                         <DealFive />
                         <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
                             {cards.map((value, index) => (
-                                <GenerateCard cardValue={value} cardIndex={index} />
+                                <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
                             ))}
                     </div>
                 )
@@ -135,5 +142,3 @@
         </script>
     </body>
 </html>
-
-<!-- <CardComponent suit={suits[Math.floor(Math.random() * suits.length)]} rank={ranks[Math.floor(Math.random() * ranks.length)]}/> -->
