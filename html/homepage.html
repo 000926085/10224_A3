@@ -27,10 +27,7 @@
                     }
                 }
 
-                let [cards, setCards] = React.useState([""])
-                const listItems = deck.map(card =>
-                    <li key={deck.indexOf(card)}>{card}</li>
-                );
+                let [cards, setCards] = React.useState([])
 
                 return (
                     <div> 
