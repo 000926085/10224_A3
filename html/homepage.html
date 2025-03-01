@@ -104,10 +104,10 @@
 
                 function ResetButton() {
                     const clear = () => {
+                        setDeck((myDeck) => myDeck.concat(cards))
                         setCards((cards) => [])
-                        setDeck((myDeck) => InitializeDeck())
                     }
-                    
+
                     return <button className="btn btn-outline-dark btn-block" onClick={clear}>Reset</button>
                 }
 
@@ -123,20 +123,6 @@
 
                 // Return the deck object and any cards generated.
                 return (
-                    /* <div> 
-                        <DealFive />
-                        <DealSeven />
-                        <WildcardButton />
-                        <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
-                        <div className="container-fluid">
-                            <div className="row justify-content-center align-items-center">
-                                {cards.map((value, index) => (
-                                    <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
-                                ))}
-                            </div>
-                        </div>
-                    </div> */
-
                     <div>
                         <div className="container"> 
                             <div className="row align-items-center">
