@@ -10,6 +10,14 @@
     </head>
 
     <body>
+        <header>
+            <div class="container-fluid">
+                <div class="row">
+                    <h1 class="display-4">Deck of Cards Manipulation</h1>
+                </div>
+            </div>
+        </header>
+
         <div id="mydiv"></div>
 
         <script type="text/babel">
@@ -78,11 +86,11 @@
                 }
 
                 function DealFive() {
-                    return <button className="btn btn-outline-dark" onClick={() => ModifyCards(5)}>Deal Five</button>
+                    return <button className="btn btn-outline-dark btn-block" onClick={() => ModifyCards(5)}>Deal Five</button>
                 }
 
                 function DealSeven() {
-                    return <button className="btn btn-outline-dark" onClick={() => ModifyCards(7)}>Deal Seven</button>
+                    return <button className="btn btn-outline-dark btn-block" onClick={() => ModifyCards(7)}>Deal Seven</button>
                 }
 
                 function WildcardButton() {
@@ -91,12 +99,27 @@
                         setCards((cards) => cards.concat([wildCard]))
                     }
 
-                    return <button className="btn btn-outline-dark" onClick={shoot}>Wildcard</button>
+                    return <button className="btn btn-outline-dark btn-block" onClick={shoot}>Wildcard</button>
+                }
+
+                function ResetButton() {
+                    function resetClick() {alert("RESET")}
+                    return <button className="btn btn-outline-dark btn-block" onClick={resetClick}>Reset</button>
+                }
+
+                function TossButton() {
+                    function tossClick() {alert("TOSS")}
+                    return <button className="btn btn-outline-dark btn-block" onClick={tossClick}>Toss</button>
+                }
+
+                function RegroupButton() {
+                    function regroupClick() {alert("REGROUP")}
+                    return <button className="btn btn-outline-dark btn-block" onClick={regroupClick}>Regroup</button>
                 }
 
                 // Return the deck object and any cards generated.
                 return (
-                    <div> 
+                    /* <div> 
                         <DealFive />
                         <DealSeven />
                         <WildcardButton />
@@ -108,43 +131,34 @@
                                 ))}
                             </div>
                         </div>
-                    </div>
-                )
-            }
+                    </div> */
 
-            function ResetButton() {
-                function resetClick() {alert("RESET")}
-                return <button className="btn btn-outline-dark btn-block" onClick={resetClick}>Reset</button>
-            }
+                    <div>
+                        <div className="container"> 
+                            <div className="row align-items-center">
+                                <div className="col-4 d-flex justify-content-end">
+                                    <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
+                                </div>
 
-            function TossButton() {
-                function tossClick() {alert("TOSS")}
-                return <button className="btn btn-outline-dark btn-block" onClick={tossClick}>Toss</button>
-            }
+                                <div className="col-3">
+                                    <DealFive />
+                                    <DealSeven />
+                                    <WildcardButton />
+                                </div>
 
-            function RegroupButton() {
-                function regroupClick() {alert("REGROUP")}
-                return <button className="btn btn-outline-dark btn-block" onClick={regroupClick}>Regroup</button>
-            }
-
-            /**
-             * Helper function to display all of the buttons.
-             **/
-            function RenderButtons() {
-                return (
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-1">
-                                <ResetButton />
+                                <div className="col-3">
+                                    <ResetButton />
+                                    <TossButton />
+                                    <RegroupButton />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="row">
-                            <div className="col-1">
-                                <TossButton />
-                            </div>
-                            <div className="col-1">
-                                <RegroupButton />
+                        <div className="container-fluid" style={{marginTop: "20px"}}>
+                            <div className="row justify-content-center align-items-center">
+                                {cards.map((value, index) => (
+                                    <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -155,7 +169,6 @@
             const root = ReactDOM.createRoot(container);
             root.render(
                 <div>
-                    <RenderButtons />
                     <GenerateDeck />
                 </div>
             )
