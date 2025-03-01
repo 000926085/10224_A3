@@ -13,6 +13,10 @@
         <div id="mydiv"></div>
 
         <script type="text/babel">
+            // Define the suits and ranks for the cards to adhere to.
+            const suits = ["♥", "♦", "♠", "♣"]
+            const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+
             function GenerateCard(props) {
                 const[mode, setMode] = React.useState(false);
                 const[selected, setSelected] = React.useState([]);
@@ -31,10 +35,6 @@
             }
 
             function InitializeDeck() {
-                // Define the suits and ranks for the cards to adhere to.
-                const suits = ["♥", "♦", "♠", "♣"]
-                const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-
                 // Create an array and fill the contents with each possible card.
                 let deck = [];
                 let count = 0;
@@ -85,15 +85,29 @@
                     return <button className="btn btn-outline-dark" onClick={() => ModifyCards(7)}>Deal Seven</button>
                 }
 
+                function WildcardButton() {
+                    const shoot = () => {
+                        let wildCard = ranks[Math.floor(Math.random() * ranks.length)] + suits[Math.floor(Math.random() * suits.length)]
+                        setCards((cards) => cards.concat([wildCard]))
+                    }
+
+                    return <button className="btn btn-outline-dark" onClick={shoot}>Wildcard</button>
+                }
+
                 // Return the deck object and any cards generated.
                 return (
                     <div> 
                         <DealFive />
                         <DealSeven />
+                        <WildcardButton />
                         <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
-                            {cards.map((value, index) => (
-                                <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
-                            ))}
+                        <div className="container-fluid">
+                            <div className="row justify-content-center align-items-center">
+                                {cards.map((value, index) => (
+                                    <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 )
             }
@@ -106,11 +120,6 @@
             function TossButton() {
                 function tossClick() {alert("TOSS")}
                 return <button className="btn btn-outline-dark btn-block" onClick={tossClick}>Toss</button>
-            }
-
-            function WildcardButton() {
-                function wildcardClick() {alert("WILDCARD")}
-                return <button className="btn btn-outline-dark btn-block" onClick={wildcardClick}>Wildcard</button>
             }
 
             function RegroupButton() {
@@ -133,9 +142,6 @@
                         <div className="row">
                             <div className="col-1">
                                 <TossButton />
-                            </div>
-                            <div className="col-1">
-                                <WildcardButton />
                             </div>
                             <div className="col-1">
                                 <RegroupButton />

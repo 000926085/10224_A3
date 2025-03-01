@@ -10,8 +10,8 @@
     font-weight: bold;
 }
 
-#selected {
-    
+.card {
+    margin: 10px;
 }
 
 #♥ {
