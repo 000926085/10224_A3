@@ -25,24 +25,6 @@
             const suits = ["♥", "♦", "♠", "♣"]
             const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
-            function GenerateCard(props) {
-                const[mode, setMode] = React.useState(false);
-                const[selected, setSelected] = React.useState([]);
-
-                function switchMode() {
-                    if (mode) {
-                        setMode(false)
-                    }
-                    else {
-                        setSelected([...selected, props.cardValue]);
-                        setMode(true)
-                        console.log(props.key)
-                    }
-                }
-
-                return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={switchMode} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
-            }
-
             function InitializeDeck() {
                 // Create an array and fill the contents with each possible card.
                 let deck = [];
@@ -60,6 +42,50 @@
                 // Set component state
                 const [cards, setCards] = React.useState([])
                 const [myDeck, setDeck] = React.useState(InitializeDeck())
+                
+                let selections = [];
+
+                /* function GenerateCard(props) {
+                    const [mode, setMode] = React.useState(false);
+
+                    const change = () => {
+                        if (mode) {
+                            setMode(false)
+                        }
+                        else {
+                            setMode(true)
+                        }
+                    }
+
+                    return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={change} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
+                } */
+
+                function GenerateCard(props) {
+                    const [mode, setMode] = React.useState(false);
+
+                    const change = () => {
+                        if (mode) {
+                            setMode(false)
+                        }
+                        else {
+                            if (selections.length == 2) {
+                                //console.log("Swap " + selections[0] + " with " + props.cardIndex)
+                                let swapped = [...cards]
+
+                                swapped[selections[0]] = props.cardValue
+                                swapped[props.cardIndex] = selections[1]
+
+                                setCards((cards) => swapped)
+                            }
+                            else {
+                                setMode(true)
+                                selections.push(props.cardIndex, props.cardValue)
+                            }
+                        }
+                    }
+
+                    return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={change} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
+                }
 
                 // Remove a random card from the deck and add it to the list of active cards.
                 function ModifyCards(times) {
@@ -70,14 +96,11 @@
                     if (times > 1) {
                         workingDeck = myDeck.concat(cards)
                         setCards((cards) => [])
-
-                        /* setCards(cards => []);
-                        workingDeck = InitializeDeck(); */
                     }
 
                     for (var i = 0; i < times; i++) {
                         if (myDeck.length != 0) {
-                            picked[i] = workingDeck[Math.floor(Math.random() * myDeck.length)]
+                            picked[i] = workingDeck[Math.floor(Math.random() * workingDeck.length)]
                             workingDeck.splice(workingDeck.indexOf(picked[i]), 1)
                         }
 
@@ -118,8 +141,11 @@
                 }
 
                 function TossButton() {
-                    function tossClick() {alert("TOSS")}
-                    return <button className="btn btn-outline-dark btn-block" onClick={tossClick}>Toss</button>
+                    const remove = () => {
+                        
+                    }
+
+                    return <button className="btn btn-outline-dark btn-block" onClick={remove}>Toss</button>
                 }
 
                 function RegroupButton() {
