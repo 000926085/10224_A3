@@ -48,21 +48,33 @@
                 // Used for determining the cards to swap.
                 let selections = [];
 
+                /**
+                 * Component to represent a Card.
+                 * 
+                 * props:
+                 *  cardValue: the combined rank and suit of a card
+                 *  cardIndex: the index of the card pertaining to currently listed cards
+                 **/
                 function GenerateCard(props) {
                     const [mode, setMode] = React.useState(false);
 
                     const change = () => {
+                        // If a selected card is selected again, simply unselect it.
                         if (mode) {
                             setMode(false)
                             selections = [];
                         }
+
                         else {
+                            // If the selection array is filled, use the information within to perform a swap.
                             if (selections.length == 2) {
                                 let swapped = [...cards]
                                 swapped[selections[0]] = props.cardValue
                                 swapped[props.cardIndex] = selections[1]
                                 setCards((cards) => swapped)
                             }
+
+                            // If a card has not been selected yet, store the information within an array.
                             else {
                                 setMode(true)
                                 selections.push(props.cardIndex, props.cardValue)
@@ -73,50 +85,69 @@
                     return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={change} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
                 }
 
-                // Remove a random card from the deck and add it to the list of active cards.
+                /**
+                 * Generates cards according to the desired amount
+                 * times: the amount of cards to be drawn
+                 **/
                 function ModifyCards(times) {
+                    // Arrays to be worked with and used to set the state once complete.
                     let picked = [];
                     let workingDeck = myDeck;
 
-                    // If Deal 5 or 7 was selected, return the deck to default.
+                    // If 5 or 7 cards are dealt, add any listed cards back to the deck and clear the hand.
                     if (times > 1) {
                         workingDeck = myDeck.concat(cards)
                         setCards((cards) => [])
                     }
 
                     for (var i = 0; i < times; i++) {
+                        // Draw cards until the deck has no cards left to draw.
                         if (myDeck.length != 0) {
                             picked[i] = workingDeck[Math.floor(Math.random() * workingDeck.length)]
                             workingDeck.splice(workingDeck.indexOf(picked[i]), 1)
                         }
 
+                        // If no cards are left, alert the user and exit the loop.
                         else {
                             alert("There are no cards remaining.");
                             break;
                         }
                     }
 
+                    // Set the state of the deck and cards according to working array contents.
                     setDeck((myDeck) => workingDeck)
                     setCards((cards) => cards.concat([ ...picked]))
                 }
 
+                /**
+                 * Used to deal five cards to the current list of cards.
+                 **/
                 function DealFive() {
                     return <button className="btn btn-outline-dark btn-block" onClick={() => ModifyCards(5)}>Deal Five</button>
                 }
 
+                /**
+                 * Used to deal seven cards to the current list of cards.
+                 **/
                 function DealSeven() {
                     return <button className="btn btn-outline-dark btn-block" onClick={() => ModifyCards(7)}>Deal Seven</button>
                 }
 
+                /**
+                 * Adds a randomly generated card to the currently listed cards. 
+                 **/
                 function WildcardButton() {
-                    const shoot = () => {
+                    const generate = () => {
                         let wildCard = ranks[Math.floor(Math.random() * ranks.length)] + suits[Math.floor(Math.random() * suits.length)]
                         setCards((cards) => cards.concat([wildCard]))
                     }
 
-                    return <button className="btn btn-outline-dark btn-block" onClick={shoot}>Wildcard</button>
+                    return <button className="btn btn-outline-dark btn-block" onClick={generate}>Wildcard</button>
                 }
 
+                /**
+                 * Returns every card in hand back to the deck and empties the hand.
+                 **/
                 function ResetButton() {
                     const clear = () => {
                         setDeck((myDeck) => myDeck.concat(cards))
@@ -126,19 +157,30 @@
                     return <button className="btn btn-outline-dark btn-block" onClick={clear}>Reset</button>
                 }
 
+                /**
+                 * Removes a selected card from the listed cards in hand and from the deck entirely.
+                 */
                 function TossButton() {
                     const remove = () => {
-                        
+                        if (selections.length == 2) {
+                            let workingArr = [...cards]
+                            workingArr.splice(workingArr.indexOf(selections[1]), 1)
+                            setCards((cards) => workingArr)
+                        } 
                     }
 
                     return <button className="btn btn-outline-dark btn-block" onClick={remove}>Toss</button>
                 }
 
+                /**
+                 * Shuffles the order of the listed cards in hand.
+                 **/
                 function RegroupButton() {
                     const shuffle = () => {
                         let arrIndex = cards.length;
                         const shuffled = [...cards];
 
+                        // For each card in the list, run the loop to swap array positions
                         while (arrIndex != 0) {
                             let randomIndex = Math.floor(Math.random() * arrIndex);
                             arrIndex--;
@@ -147,6 +189,7 @@
                             shuffled[randomIndex], shuffled[arrIndex]];
                         }
 
+                        // Set the state of cards according to the shuffled working array contents
                         setCards((cards) => shuffled)
                     }
 
@@ -178,7 +221,7 @@
                         <div className="container-fluid" style={{marginTop: "20px"}}>
                             <div className="row justify-content-center align-items-center">
                                 {cards.map((value, index) => (
-                                    <GenerateCard key={Math.floor(Math.random() * 100) + value + index} cardValue={value} cardIndex={index} currentCards={cards}/>
+                                    <GenerateCard key={Math.floor(Math.random() * 100) + value + index} cardValue={value} cardIndex={index}/>
                                 ))}
                             </div>
                         </div>
@@ -186,6 +229,7 @@
                 )
             }
 
+            // Render the content to the page.
             const container = document.getElementById('mydiv');
             const root = ReactDOM.createRoot(container);
             root.render(
