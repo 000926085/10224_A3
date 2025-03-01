@@ -25,8 +25,10 @@
             const suits = ["♥", "♦", "♠", "♣"]
             const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
+            /**
+             * Creates an array and fills the contents with a standard set of 52 cards.
+             **/
             function InitializeDeck() {
-                // Create an array and fill the contents with each possible card.
                 let deck = [];
                 let count = 0;
                 for (var i = 0; i < suits.length; i++) {
@@ -43,22 +45,8 @@
                 const [cards, setCards] = React.useState([])
                 const [myDeck, setDeck] = React.useState(InitializeDeck())
                 
+                // Used for determining the cards to swap.
                 let selections = [];
-
-                /* function GenerateCard(props) {
-                    const [mode, setMode] = React.useState(false);
-
-                    const change = () => {
-                        if (mode) {
-                            setMode(false)
-                        }
-                        else {
-                            setMode(true)
-                        }
-                    }
-
-                    return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={change} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
-                } */
 
                 function GenerateCard(props) {
                     const [mode, setMode] = React.useState(false);
@@ -66,15 +54,13 @@
                     const change = () => {
                         if (mode) {
                             setMode(false)
+                            selections = [];
                         }
                         else {
                             if (selections.length == 2) {
-                                //console.log("Swap " + selections[0] + " with " + props.cardIndex)
                                 let swapped = [...cards]
-
                                 swapped[selections[0]] = props.cardValue
                                 swapped[props.cardIndex] = selections[1]
-
                                 setCards((cards) => swapped)
                             }
                             else {
