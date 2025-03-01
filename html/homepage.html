@@ -36,6 +36,7 @@
                     else {
                         setSelected([...selected, props.cardValue]);
                         setMode(true)
+                        console.log(props.key)
                     }
                 }
 
@@ -63,17 +64,21 @@
                 // Remove a random card from the deck and add it to the list of active cards.
                 function ModifyCards(times) {
                     let picked = [];
+                    let workingDeck = myDeck;
 
                     // If Deal 5 or 7 was selected, return the deck to default.
                     if (times > 1) {
-                        setCards(cards => []);
+                        workingDeck = myDeck.concat(cards)
+                        setCards((cards) => [])
+
+                        /* setCards(cards => []);
+                        workingDeck = InitializeDeck(); */
                     }
 
                     for (var i = 0; i < times; i++) {
                         if (myDeck.length != 0) {
-                            picked[i] = myDeck[Math.floor(Math.random() * myDeck.length)]
-                            myDeck.splice(myDeck.indexOf(picked[i]), 1)
-                            setDeck(myDeck)
+                            picked[i] = workingDeck[Math.floor(Math.random() * myDeck.length)]
+                            workingDeck.splice(workingDeck.indexOf(picked[i]), 1)
                         }
 
                         else {
@@ -82,6 +87,7 @@
                         }
                     }
 
+                    setDeck((myDeck) => workingDeck)
                     setCards((cards) => cards.concat([ ...picked]))
                 }
 
@@ -117,17 +123,30 @@
                 }
 
                 function RegroupButton() {
-                    function regroupClick() {alert("REGROUP")}
-                    return <button className="btn btn-outline-dark btn-block" onClick={regroupClick}>Regroup</button>
+                    const shuffle = () => {
+                        let arrIndex = cards.length;
+                        const shuffled = [...cards];
+
+                        while (arrIndex != 0) {
+                            let randomIndex = Math.floor(Math.random() * arrIndex);
+                            arrIndex--;
+       
+                            [shuffled[arrIndex], shuffled[randomIndex]] = [
+                            shuffled[randomIndex], shuffled[arrIndex]];
+                        }
+
+                        setCards((cards) => shuffled)
+                    }
+
+                    return <button className="btn btn-outline-dark btn-block" onClick={shuffle}>Regroup</button>
                 }
 
-                // Return the deck object and any cards generated.
                 return (
                     <div>
                         <div className="container"> 
                             <div className="row align-items-center">
                                 <div className="col-4 d-flex justify-content-end">
-                                    <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
+                                    <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Draw\n(' + myDeck.length + ")") : 'Empty!'}</div>
                                 </div>
 
                                 <div className="col-3">
@@ -147,7 +166,7 @@
                         <div className="container-fluid" style={{marginTop: "20px"}}>
                             <div className="row justify-content-center align-items-center">
                                 {cards.map((value, index) => (
-                                    <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
+                                    <GenerateCard key={Math.floor(Math.random() * 100) + value + index} cardValue={value} cardIndex={index} currentCards={cards}/>
                                 ))}
                             </div>
                         </div>
