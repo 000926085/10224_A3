@@ -205,12 +205,14 @@
                                 </div>
 
                                 <div className="col-3">
+                                    <h2>{myDeck.length > 0 ? "Within Deck: " + myDeck.length : "Empty!"}</h2>
                                     <DealFive />
                                     <DealSeven />
                                     <WildcardButton />
                                 </div>
 
                                 <div className="col-3">
+                                    <h2>{cards.length + " Cards in Hand"}</h2>
                                     <ResetButton />
                                     <TossButton />
                                     <RegroupButton />
