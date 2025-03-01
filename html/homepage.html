@@ -12,8 +12,8 @@
     <body>
         <header>
             <div class="container-fluid">
-                <div class="row">
-                    <h1 class="display-4">Deck of Cards Manipulation</h1>
+                <div class="row justify-content-center">
+                    <h1 class="display-3">Deck of Cards Manipulation</h1>
                 </div>
             </div>
         </header>
@@ -103,8 +103,12 @@
                 }
 
                 function ResetButton() {
-                    function resetClick() {alert("RESET")}
-                    return <button className="btn btn-outline-dark btn-block" onClick={resetClick}>Reset</button>
+                    const clear = () => {
+                        setCards((cards) => [])
+                        setDeck((myDeck) => InitializeDeck())
+                    }
+                    
+                    return <button className="btn btn-outline-dark btn-block" onClick={clear}>Reset</button>
                 }
 
                 function TossButton() {
