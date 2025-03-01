@@ -15,12 +15,14 @@
         <script type="text/babel">
             function GenerateCard(props) {
                 const[mode, setMode] = React.useState(false);
+                const[selected, setSelected] = React.useState([]);
 
                 function switchMode() {
                     if (mode) {
                         setMode(false)
                     }
                     else {
+                        setSelected([...selected, props.cardValue]);
                         setMode(true)
                     }
                 }
@@ -28,7 +30,7 @@
                 return <div className="card" id={props.cardValue.charAt(props.cardValue.length-1)} onClick={switchMode} style={{border: mode ? "2px solid red" : "2px solid black"}}>{props.cardValue}</div>
             }
 
-            function GenerateDeck() {
+            function InitializeDeck() {
                 // Define the suits and ranks for the cards to adhere to.
                 const suits = ["♥", "♦", "♠", "♣"]
                 const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
@@ -42,43 +44,58 @@
                     }
                 }
 
+                return deck;
+            }
+
+            function GenerateDeck() {
                 // Set component state
                 const [cards, setCards] = React.useState([])
-                const [myDeck, setDeck] = React.useState(deck)
+                const [myDeck, setDeck] = React.useState(InitializeDeck())
 
                 // Remove a random card from the deck and add it to the list of active cards.
                 function ModifyCards(times) {
-                    for (i = 0; i < times; i++) {
-                        if (myDeck.length != 0) {
-                            let picked = myDeck[Math.floor(Math.random() * myDeck.length)]
+                    let picked = [];
 
-                            setCards([...cards, picked])
-                            myDeck.splice(myDeck.indexOf(picked), 1)
-                            setDeck(myDeck) 
-                        }
-                        else { alert("You have no cards remaining!") }
+                    // If Deal 5 or 7 was selected, return the deck to default.
+                    if (times > 1) {
+                        setCards(cards => []);
                     }
+
+                    for (var i = 0; i < times; i++) {
+                        if (myDeck.length != 0) {
+                            picked[i] = myDeck[Math.floor(Math.random() * myDeck.length)]
+                            myDeck.splice(myDeck.indexOf(picked[i]), 1)
+                            setDeck(myDeck)
+                        }
+
+                        else {
+                            alert("There are no cards remaining.");
+                            break;
+                        }
+                    }
+
+                    setCards((cards) => cards.concat([ ...picked]))
                 }
 
                 function DealFive() {
                     return <button className="btn btn-outline-dark" onClick={() => ModifyCards(5)}>Deal Five</button>
                 }
 
+                function DealSeven() {
+                    return <button className="btn btn-outline-dark" onClick={() => ModifyCards(7)}>Deal Seven</button>
+                }
+
                 // Return the deck object and any cards generated.
                 return (
                     <div> 
                         <DealFive />
+                        <DealSeven />
                         <div className="deck" onClick={() => ModifyCards(1)}>{myDeck.length > 0 ? ('Generate\n(' + myDeck.length + ")") : 'Empty!'}</div>
                             {cards.map((value, index) => (
                                 <GenerateCard key={value} cardValue={value} cardIndex={index} currentCards={cards}/>
                             ))}
                     </div>
                 )
-            }
-
-            function DealSeven() {
-                function sevenClick() {alert("Seven Dealt")}
-                return <button className="btn btn-outline-dark btn-block" onClick={sevenClick}>Deal Seven</button>
             }
 
             function ResetButton() {
@@ -108,9 +125,6 @@
                 return (
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-1">
-                                <DealSeven />
-                            </div>
                             <div className="col-1">
                                 <ResetButton />
                             </div>
